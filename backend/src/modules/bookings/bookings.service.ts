@@ -59,13 +59,13 @@ export async function listBookings(query: BookingQueryInput) {
 
   if (query.search) {
     where.OR = [
-      { reference: { contains: query.search, mode: "insensitive" } },
+      { reference: { contains: query.search } },
       {
         customer: {
           OR: [
-            { firstName: { contains: query.search, mode: "insensitive" } },
-            { lastName: { contains: query.search, mode: "insensitive" } },
-            { email: { contains: query.search, mode: "insensitive" } },
+            { firstName: { contains: query.search } },
+            { lastName: { contains: query.search } },
+            { email: { contains: query.search } },
           ],
         },
       },

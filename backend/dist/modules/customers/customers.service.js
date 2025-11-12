@@ -8,7 +8,6 @@ exports.getCustomer = getCustomer;
 exports.createCustomer = createCustomer;
 exports.updateCustomer = updateCustomer;
 exports.deleteCustomer = deleteCustomer;
-const client_1 = require("../../generated/prisma/client");
 const prisma_1 = __importDefault(require("../../lib/prisma"));
 const app_error_1 = __importDefault(require("../../utils/app-error"));
 async function listCustomers(query) {
@@ -18,19 +17,16 @@ async function listCustomers(query) {
                 {
                     firstName: {
                         contains: query.search,
-                        mode: client_1.Prisma.QueryMode.insensitive,
                     },
                 },
                 {
                     lastName: {
                         contains: query.search,
-                        mode: client_1.Prisma.QueryMode.insensitive,
                     },
                 },
                 {
                     email: {
                         contains: query.search,
-                        mode: client_1.Prisma.QueryMode.insensitive,
                     },
                 },
             ],

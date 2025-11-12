@@ -14,19 +14,16 @@ export async function listCustomers(query: CustomerQueryInput) {
           {
             firstName: {
               contains: query.search,
-              mode: Prisma.QueryMode.insensitive,
             },
           },
           {
             lastName: {
               contains: query.search,
-              mode: Prisma.QueryMode.insensitive,
             },
           },
           {
             email: {
               contains: query.search,
-              mode: Prisma.QueryMode.insensitive,
             },
           },
         ],

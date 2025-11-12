@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.JsonNullValueInput = exports.NullableJsonNullValueInput = exports.SortOrder = exports.IntegrationSettingScalarFieldEnum = exports.BookingTimelineEventScalarFieldEnum = exports.CleanerAssignmentScalarFieldEnum = exports.BookingAddonScalarFieldEnum = exports.BookingItemScalarFieldEnum = exports.BookingScalarFieldEnum = exports.RewardTransactionScalarFieldEnum = exports.RewardSettingScalarFieldEnum = exports.CustomerMembershipScalarFieldEnum = exports.MembershipPlanScalarFieldEnum = exports.ServiceAddonScalarFieldEnum = exports.ServicePackageScalarFieldEnum = exports.ServiceSegmentScalarFieldEnum = exports.ServiceCategoryScalarFieldEnum = exports.CleanerScalarFieldEnum = exports.CustomerScalarFieldEnum = exports.AdminScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
+exports.IntegrationSettingOrderByRelevanceFieldEnum = exports.BookingTimelineEventOrderByRelevanceFieldEnum = exports.CleanerAssignmentOrderByRelevanceFieldEnum = exports.BookingAddonOrderByRelevanceFieldEnum = exports.BookingItemOrderByRelevanceFieldEnum = exports.BookingOrderByRelevanceFieldEnum = exports.RewardTransactionOrderByRelevanceFieldEnum = exports.RewardSettingOrderByRelevanceFieldEnum = exports.CustomerMembershipOrderByRelevanceFieldEnum = exports.MembershipPlanOrderByRelevanceFieldEnum = exports.ServiceAddonOrderByRelevanceFieldEnum = exports.ServicePackageOrderByRelevanceFieldEnum = exports.QueryMode = exports.JsonNullValueFilter = exports.ServiceSegmentOrderByRelevanceFieldEnum = exports.ServiceCategoryOrderByRelevanceFieldEnum = exports.CleanerOrderByRelevanceFieldEnum = exports.CustomerOrderByRelevanceFieldEnum = exports.AdminOrderByRelevanceFieldEnum = exports.NullsOrder = exports.JsonNullValueInput = exports.NullableJsonNullValueInput = exports.SortOrder = exports.IntegrationSettingScalarFieldEnum = exports.BookingTimelineEventScalarFieldEnum = exports.CleanerAssignmentScalarFieldEnum = exports.BookingAddonScalarFieldEnum = exports.BookingItemScalarFieldEnum = exports.BookingScalarFieldEnum = exports.RewardTransactionScalarFieldEnum = exports.RewardSettingScalarFieldEnum = exports.CustomerMembershipScalarFieldEnum = exports.MembershipPlanScalarFieldEnum = exports.ServiceAddonScalarFieldEnum = exports.ServicePackageScalarFieldEnum = exports.ServiceSegmentScalarFieldEnum = exports.ServiceCategoryScalarFieldEnum = exports.CleanerScalarFieldEnum = exports.CustomerScalarFieldEnum = exports.AdminScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/index-browser"));
 exports.Decimal = runtime.Decimal;
 exports.NullTypes = {
@@ -326,16 +326,128 @@ exports.NullableJsonNullValueInput = {
 exports.JsonNullValueInput = {
     JsonNull: exports.JsonNull
 };
-exports.QueryMode = {
-    default: 'default',
-    insensitive: 'insensitive'
-};
 exports.NullsOrder = {
     first: 'first',
     last: 'last'
+};
+exports.AdminOrderByRelevanceFieldEnum = {
+    id: 'id',
+    email: 'email',
+    fullName: 'fullName',
+    passwordHash: 'passwordHash'
+};
+exports.CustomerOrderByRelevanceFieldEnum = {
+    id: 'id',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    email: 'email',
+    phone: 'phone',
+    stripeCustomerId: 'stripeCustomerId',
+    preferredContact: 'preferredContact',
+    notes: 'notes'
+};
+exports.CleanerOrderByRelevanceFieldEnum = {
+    id: 'id',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    email: 'email',
+    phone: 'phone',
+    notes: 'notes'
+};
+exports.ServiceCategoryOrderByRelevanceFieldEnum = {
+    id: 'id',
+    slug: 'slug',
+    name: 'name',
+    summary: 'summary',
+    description: 'description',
+    icon: 'icon'
+};
+exports.ServiceSegmentOrderByRelevanceFieldEnum = {
+    id: 'id',
+    serviceCategoryId: 'serviceCategoryId',
+    name: 'name',
+    description: 'description'
 };
 exports.JsonNullValueFilter = {
     DbNull: exports.DbNull,
     JsonNull: exports.JsonNull,
     AnyNull: exports.AnyNull
+};
+exports.QueryMode = {
+    default: 'default',
+    insensitive: 'insensitive'
+};
+exports.ServicePackageOrderByRelevanceFieldEnum = {
+    id: 'id',
+    serviceCategoryId: 'serviceCategoryId',
+    segmentId: 'segmentId',
+    name: 'name',
+    description: 'description'
+};
+exports.ServiceAddonOrderByRelevanceFieldEnum = {
+    id: 'id',
+    serviceCategoryId: 'serviceCategoryId',
+    name: 'name',
+    description: 'description'
+};
+exports.MembershipPlanOrderByRelevanceFieldEnum = {
+    id: 'id',
+    name: 'name',
+    slug: 'slug'
+};
+exports.CustomerMembershipOrderByRelevanceFieldEnum = {
+    id: 'id',
+    customerId: 'customerId',
+    membershipPlanId: 'membershipPlanId',
+    notes: 'notes'
+};
+exports.RewardSettingOrderByRelevanceFieldEnum = {
+    note: 'note'
+};
+exports.RewardTransactionOrderByRelevanceFieldEnum = {
+    id: 'id',
+    customerId: 'customerId',
+    bookingId: 'bookingId',
+    processedByAdminId: 'processedByAdminId',
+    description: 'description'
+};
+exports.BookingOrderByRelevanceFieldEnum = {
+    id: 'id',
+    reference: 'reference',
+    customerId: 'customerId',
+    serviceCategoryId: 'serviceCategoryId',
+    membershipPlanId: 'membershipPlanId',
+    approvedByAdminId: 'approvedByAdminId',
+    notes: 'notes',
+    addressLine1: 'addressLine1',
+    addressLine2: 'addressLine2',
+    suburb: 'suburb',
+    state: 'state',
+    postcode: 'postcode'
+};
+exports.BookingItemOrderByRelevanceFieldEnum = {
+    id: 'id',
+    bookingId: 'bookingId',
+    servicePackageId: 'servicePackageId'
+};
+exports.BookingAddonOrderByRelevanceFieldEnum = {
+    id: 'id',
+    bookingId: 'bookingId',
+    serviceAddonId: 'serviceAddonId'
+};
+exports.CleanerAssignmentOrderByRelevanceFieldEnum = {
+    id: 'id',
+    bookingId: 'bookingId',
+    cleanerId: 'cleanerId',
+    notes: 'notes'
+};
+exports.BookingTimelineEventOrderByRelevanceFieldEnum = {
+    id: 'id',
+    bookingId: 'bookingId',
+    notes: 'notes'
+};
+exports.IntegrationSettingOrderByRelevanceFieldEnum = {
+    id: 'id',
+    key: 'key',
+    description: 'description'
 };
