@@ -1,0 +1,16 @@
+export enum Path {
+    HOME = '/',
+    ABOUT = '/about',
+    ARTS = '/arts',
+    ARTWORK_DETAILS = '/artwork-details',
+    CONTACT = '/contact',
+    DASHBOARD = '/dashboard',
+    LOGIN = '/login',
+    REGISTER = '/register',
+    FORGOT_PASSWORD = '/forgot-password',
+    RESET_PASSWORD = '/reset-password',
+    VERIFY_EMAIL = '/verify-email/:token',
+    USERS = '/users',
+    CATEGORIES = '/categories',
+    ARTWORKS = '/artworks',
+}
