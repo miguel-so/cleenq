@@ -1,0 +1,398 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  OPERATIONS
+  SUPPORT
+}
+
+enum AdminStatus {
+  ACTIVE
+  INVITED
+  SUSPENDED
+}
+
+enum ServiceSegmentType {
+  RESIDENTIAL
+  COMMERCIAL
+  INDUSTRIAL
+  ADD_ON
+  SPECIALTY
+  GENERAL
+}
+
+enum AudienceType {
+  RESIDENTIAL
+  COMMERCIAL
+  INDUSTRIAL
+  UNIVERSAL
+}
+
+enum PriceUnit {
+  PER_JOB
+  PER_SQUARE_METER
+  PER_ROOM
+  PER_WINDOW
+  PER_PANEL
+  PER_ITEM
+  PER_HOUR
+  BY_QUOTE
+}
+
+enum MembershipStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  EXPIRED
+}
+
+enum RewardTransactionType {
+  EARN
+  REDEEM
+  ADJUSTMENT
+  EXPIRY
+}
+
+enum BookingStatus {
+  PENDING
+  QUOTED
+  CONFIRMED
+  SCHEDULED
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum BookingSource {
+  WEB
+  MOBILE
+  ADMIN
+  SERVIS
+}
+
+enum AssignmentStatus {
+  PENDING
+  ACCEPTED
+  STARTED
+  COMPLETED
+  CANCELLED
+}
+
+enum CleanerStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model Admin {
+  id             String                  @id @default(uuid())
+  email          String                  @unique
+  fullName       String
+  passwordHash   String
+  role           AdminRole               @default(OPERATIONS)
+  status         AdminStatus             @default(ACTIVE)
+  lastLoginAt    DateTime?
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  approvedBookings Booking[]             @relation("BookingApprovedBy")
+  rewardAdjustments RewardTransaction[]  @relation("RewardProcessedBy")
+}
+
+model Customer {
+  id                String                 @id @default(uuid())
+  firstName         String
+  lastName          String
+  email             String                 @unique
+  phone             String?
+  stripeCustomerId  String?
+  preferredContact  String?
+  notes             String?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  memberships       CustomerMembership[]
+  bookings          Booking[]
+  rewardTransactions RewardTransaction[]
+}
+
+model Cleaner {
+  id              String             @id @default(uuid())
+  firstName       String
+  lastName        String
+  email           String?            @unique
+  phone           String?
+  status          CleanerStatus      @default(ACTIVE)
+  notes           String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  assignments     CleanerAssignment[]
+}
+
+model ServiceCategory {
+  id             String             @id @default(uuid())
+  slug           String             @unique
+  name           String
+  summary        String?
+  description    String?
+  icon           String?
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  segments       ServiceSegment[]
+  packages       ServicePackage[]
+  addOns         ServiceAddon[]
+  bookings       Booking[]
+}
+
+model ServiceSegment {
+  id                String             @id @default(uuid())
+  serviceCategoryId String
+  name              String
+  description       String?
+  type              ServiceSegmentType @default(GENERAL)
+  displayOrder      Int                @default(0)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  serviceCategory   ServiceCategory    @relation(fields: [serviceCategoryId], references: [id], onDelete: Cascade)
+  packages          ServicePackage[]
+
+  @@index([serviceCategoryId, type, displayOrder])
+  @@unique([serviceCategoryId, name])
+}
+
+model ServicePackage {
+  id                String           @id @default(uuid())
+  serviceCategoryId String
+  segmentId         String?
+  name              String
+  description       String?
+  audience          AudienceType?    @default(RESIDENTIAL)
+  basePrice         Decimal?         @db.Decimal(10, 2)
+  priceUnit         PriceUnit        @default(PER_JOB)
+  priceFrom         Boolean          @default(true)
+  minQuantity       Float?
+  maxQuantity       Float?
+  metadata          Json?
+  isActive          Boolean          @default(true)
+  displayOrder      Int              @default(0)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  serviceCategory   ServiceCategory  @relation(fields: [serviceCategoryId], references: [id], onDelete: Cascade)
+  segment           ServiceSegment?  @relation(fields: [segmentId], references: [id], onDelete: SetNull)
+  bookingItems      BookingItem[]
+
+  @@index([serviceCategoryId, isActive])
+  @@index([segmentId, displayOrder])
+  @@unique([serviceCategoryId, segmentId, name])
+}
+
+model ServiceAddon {
+  id                String           @id @default(uuid())
+  serviceCategoryId String
+  name              String
+  description       String?
+  audience          AudienceType?    @default(UNIVERSAL)
+  price             Decimal?         @db.Decimal(10, 2)
+  priceUnit         PriceUnit        @default(PER_JOB)
+  priceFrom         Boolean          @default(true)
+  metadata          Json?
+  isActive          Boolean          @default(true)
+  displayOrder      Int              @default(0)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  serviceCategory   ServiceCategory  @relation(fields: [serviceCategoryId], references: [id], onDelete: Cascade)
+  bookingAddOns     BookingAddon[]
+
+  @@index([serviceCategoryId, isActive])
+  @@unique([serviceCategoryId, name])
+}
+
+model MembershipPlan {
+  id               String                @id @default(uuid())
+  name             String
+  slug             String                @unique
+  tierLevel        Int
+  minPoints        Int
+  maxPoints        Int?
+  discountPercent  Float                 @default(0)
+  monthlyFee       Decimal?              @db.Decimal(10, 2)
+  annualFee        Decimal?              @db.Decimal(10, 2)
+  perks            Json?
+  isActive         Boolean               @default(true)
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  memberships      CustomerMembership[]
+  bookings         Booking[]
+}
+
+model CustomerMembership {
+  id                 String            @id @default(uuid())
+  customerId         String
+  membershipPlanId   String
+  status             MembershipStatus  @default(ACTIVE)
+  startedAt          DateTime          @default(now())
+  expiresAt          DateTime?
+  autoRenew          Boolean           @default(false)
+  notes              String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  customer           Customer          @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  membershipPlan     MembershipPlan    @relation(fields: [membershipPlanId], references: [id], onDelete: Cascade)
+
+  @@index([customerId, status])
+  @@unique([customerId, membershipPlanId, status])
+}
+
+model RewardSetting {
+  id                 Int       @id @default(1)
+  pointsPerDollar    Float     @default(1)
+  redemptionThreshold Int      @default(500)
+  redemptionValue    Decimal   @default(25) @db.Decimal(10, 2)
+  note               String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model RewardTransaction {
+  id                 String                  @id @default(uuid())
+  customerId         String
+  bookingId          String?
+  processedByAdminId String?
+  points             Int
+  type               RewardTransactionType
+  description        String?
+  createdAt          DateTime                @default(now())
+  customer           Customer                @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  booking            Booking?                @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  processedByAdmin   Admin?                  @relation("RewardProcessedBy", fields: [processedByAdminId], references: [id], onDelete: SetNull)
+
+  @@index([customerId, createdAt])
+}
+
+model Booking {
+  id                   String             @id @default(uuid())
+  reference            String             @unique
+  customerId           String
+  serviceCategoryId    String
+  membershipPlanId     String?
+  approvedByAdminId    String?
+  status               BookingStatus      @default(PENDING)
+  source               BookingSource      @default(WEB)
+  requestedAt          DateTime           @default(now())
+  scheduledAt          DateTime?
+  durationMinutes      Int?
+  subtotal             Decimal            @default(0) @db.Decimal(12, 2)
+  discount             Decimal            @default(0) @db.Decimal(12, 2)
+  tax                  Decimal            @default(0) @db.Decimal(12, 2)
+  total                Decimal            @default(0) @db.Decimal(12, 2)
+  notes                String?
+  addressLine1         String?
+  addressLine2         String?
+  suburb               String?
+  state                String?
+  postcode             String?
+  latitude             Decimal?           @db.Decimal(10, 6)
+  longitude            Decimal?           @db.Decimal(10, 6)
+  cancelledAt          DateTime?
+  completedAt          DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  customer             Customer           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  serviceCategory      ServiceCategory    @relation(fields: [serviceCategoryId], references: [id], onDelete: Cascade)
+  membershipPlan       MembershipPlan?    @relation(fields: [membershipPlanId], references: [id], onDelete: SetNull)
+  approvedBy           Admin?             @relation("BookingApprovedBy", fields: [approvedByAdminId], references: [id], onDelete: SetNull)
+  items                BookingItem[]
+  addOns               BookingAddon[]
+  cleanerAssignments   CleanerAssignment[]
+  timelineEvents       BookingTimelineEvent[]
+  rewards              RewardTransaction[]
+
+  @@index([customerId, status])
+  @@index([serviceCategoryId, status])
+  @@index([scheduledAt])
+}
+
+model BookingItem {
+  id               String         @id @default(uuid())
+  bookingId        String
+  servicePackageId String
+  quantity         Float          @default(1)
+  unitPrice        Decimal        @db.Decimal(12, 2)
+  discount         Decimal        @default(0) @db.Decimal(12, 2)
+  total            Decimal        @db.Decimal(12, 2)
+  metadata         Json?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  booking          Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  servicePackage   ServicePackage @relation(fields: [servicePackageId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+}
+
+model BookingAddon {
+  id             String        @id @default(uuid())
+  bookingId      String
+  serviceAddonId String
+  quantity       Float         @default(1)
+  unitPrice      Decimal       @db.Decimal(12, 2)
+  total          Decimal       @db.Decimal(12, 2)
+  metadata       Json?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  booking        Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  serviceAddon   ServiceAddon  @relation(fields: [serviceAddonId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+}
+
+model CleanerAssignment {
+  id          String           @id @default(uuid())
+  bookingId   String
+  cleanerId   String
+  status      AssignmentStatus @default(PENDING)
+  assignedAt  DateTime         @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+  notes       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  booking     Booking          @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  cleaner     Cleaner          @relation(fields: [cleanerId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([cleanerId, status])
+}
+
+model BookingTimelineEvent {
+  id          String        @id @default(uuid())
+  bookingId   String
+  status      BookingStatus
+  notes       String?
+  createdAt   DateTime      @default(now())
+  booking     Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId, createdAt])
+}
+
+model IntegrationSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       Json
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

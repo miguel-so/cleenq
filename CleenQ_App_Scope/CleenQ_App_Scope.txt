@@ -1,0 +1,100 @@
+CleenQ Cleaning App – Full Scope Document
+This document outlines the full scope for the CleenQ Cleaning App, a nationwide cleaning service platform designed to manage client bookings, cleaner scheduling, loyalty programs, and integration with Servis Software. The app will be developed for both iOS and Android platforms, with a responsive web portal for administration and client access.
+1. Project Overview
+CleenQ aims to deliver a modern, simple, and reliable cleaning experience through an all-in-one mobile and web application. The platform allows customers to instantly quote, book, and pay for cleaning services online, while cleaners and managers coordinate through a dedicated mobile interface.
+2. Core Objectives
+• Simplify customer booking and quoting processes.
+• Streamline cleaner scheduling and job management.
+• Integrate with Servis Software for quote, booking, and scheduling synchronization.
+• Implement a loyalty and rewards program to retain customers.
+• Support all 9 CleenQ cleaning services across Australia.
+3. App Modules
+3.1 Client App (iOS, Android, Web)
+The Client App will allow users to:
+• View, quote, and book services instantly.
+• Choose service type, date/time, and additional add-ons.
+• Make secure payments through Stripe or PayPal.
+• Track cleaner arrival and job progress in real time.
+• Earn and redeem loyalty points ($1 = 1 point; 500 points = $25 off).
+• Manage subscription/membership tiers (Basic, Premium, Platinum).
+• Access booking history, invoices, and receipts.
+• Submit ratings and feedback.
+• Receive push notifications for job status, rewards, and promotions.
+3.2 Cleaner App (iOS, Android)
+The Cleaner App will allow CleenQ cleaners and contractors to:
+• View assigned jobs and upcoming schedule.
+• Accept or decline jobs (based on availability).
+• Access job details, location, and client instructions.
+• Complete checklists with photos and notes.
+• Log start/finish times and generate automatic time sheets.
+• Upload before/after images and customer signatures.
+• Sync data automatically with Servis Software.
+• View payments, completed jobs, and ratings.
+• Access support, training, and policy documents.
+3.3 Admin & Management Portal (Web Dashboard)
+The Admin Portal will enable CleenQ management to:
+• Oversee all bookings, jobs, clients, and cleaners.
+• Manage quotes, invoices, and payments via Servis Software integration.
+• View live calendar of scheduled jobs.
+• Assign or reassign cleaners manually.
+• Track job completion, ratings, and cleaner performance.
+• Monitor revenue, bookings, and client retention analytics.
+• Manage loyalty and promotional campaigns.
+• Send notifications and newsletters to clients.
+• Export data and generate reports (daily, weekly, monthly).
+4. Integration with Servis Software
+The CleenQ App will integrate directly with Servis Software via API or webhook for the following functionalities:
+• Quote synchronization – automatically create and update quotes.
+• Booking synchronization – reflect confirmed jobs from Servis in CleenQ calendar.
+• Client sync – share client details and booking history.
+• Schedule synchronization – match job timings between Servis and CleenQ.
+• Invoice generation and payment recording.
+5. Loyalty & Rewards Program
+The CleenQ Rewards System will allow customers to earn and redeem points for services.
+• 1 point for every $1 spent.
+• Redeem 500 points for $25 discount.
+• Tier levels:
+  - Basic: 0–999 points – Standard pricing.
+  - Premium: 1,000–2,999 points – 5% discount on all services.
+  - Platinum: 3,000+ points – 10% discount and priority booking.
+• Integration with Stripe for automated points tracking.
+• Points visible in the app dashboard and checkout.
+6. Included Services
+1. Domestic Cleaning
+2. Commercial Cleaning
+3. Window Washing
+4. Steam Cleaning
+5. High Pressure Cleaning
+6. Rubbish Removal
+7. Solar Panel Cleaning
+8. Gutter Cleaning
+9. Disinfection & Sanitisation
+7. Technical Specifications
+• Platforms: iOS, Android, Web (React / React Native preferred).
+• Backend: Node.js / Python Flask with Servis API integration.
+• Database: PostgreSQL or Firebase.
+• Payment Gateway: Stripe / PayPal.
+• Notifications: Firebase Cloud Messaging / OneSignal.
+• Hosting: AWS / Google Cloud.
+• Security: SSL encryption, role-based access, GDPR-compliant storage.
+8. UI/UX Design
+• Mobile-first, clean design matching CleenQ brand (“Where Quality Meets Clean”).
+• Booking flow optimized for <60 seconds completion.
+• Branded colour palette and typography.
+• Customer-friendly calendar and pricing view.
+• Intuitive cleaner dashboard with checklist-based navigation.
+9. Deliverables
+• Fully functional iOS and Android mobile apps.
+• Web-based admin portal.
+• API integration with Servis Software.
+• Loyalty & rewards management system.
+• Hosting setup and deployment documentation.
+• Testing and QA plan.
+• User manuals for client, cleaner, and admin use.
+10. Project Phases
+Phase 1 – Discovery & Design (2 weeks)
+Phase 2 – Backend & API Integration (4 weeks)
+Phase 3 – Frontend Development (4 weeks)
+Phase 4 – Testing & QA (2 weeks)
+Phase 5 – Deployment & Go Live (1 week)
+Phase 6 – Support & Maintenance (ongoing)

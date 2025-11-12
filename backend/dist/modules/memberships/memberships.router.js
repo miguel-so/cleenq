@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const client_1 = require("../../generated/prisma/client");
+const validate_request_1 = __importDefault(require("../../middlewares/validate-request"));
+const require_admin_1 = require("../../middlewares/require-admin");
+const memberships_controller_1 = require("./memberships.controller");
+const memberships_schema_1 = require("./memberships.schema");
+const router = (0, express_1.Router)();
+const manageRoles = [client_1.AdminRole.SUPER_ADMIN, client_1.AdminRole.OPERATIONS];
+router.get("/plans", (0, require_admin_1.requireAdmin)(), memberships_controller_1.getMembershipPlans);
+router.post("/plans", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(memberships_schema_1.membershipPlanSchema), memberships_controller_1.createMembershipPlanHandler);
+router.patch("/plans/:planId", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(memberships_schema_1.updateMembershipPlanSchema), memberships_controller_1.updateMembershipPlanHandler);
+router.delete("/plans/:planId", (0, require_admin_1.requireAdmin)([client_1.AdminRole.SUPER_ADMIN]), memberships_controller_1.deleteMembershipPlanHandler);
+router.get("/members", (0, require_admin_1.requireAdmin)(manageRoles), memberships_controller_1.getCustomerMemberships);
+router.post("/members", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(memberships_schema_1.assignMembershipSchema), memberships_controller_1.assignMembershipHandler);
+router.patch("/members/:id", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(memberships_schema_1.updateCustomerMembershipSchema), memberships_controller_1.updateCustomerMembershipHandler);
+exports.default = router;

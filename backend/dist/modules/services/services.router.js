@@ -1,0 +1,27 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const client_1 = require("../../generated/prisma/client");
+const validate_request_1 = __importDefault(require("../../middlewares/validate-request"));
+const require_admin_1 = require("../../middlewares/require-admin");
+const services_controller_1 = require("./services.controller");
+const services_schema_1 = require("./services.schema");
+const router = (0, express_1.Router)();
+const manageRoles = [client_1.AdminRole.SUPER_ADMIN, client_1.AdminRole.OPERATIONS];
+router.get("/", (0, require_admin_1.requireAdmin)(), services_controller_1.listServices);
+router.post("/", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(services_schema_1.serviceCategorySchema), services_controller_1.createService);
+router.patch("/:serviceId", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(services_schema_1.updateServiceCategorySchema), services_controller_1.updateService);
+router.delete("/:serviceId", (0, require_admin_1.requireAdmin)([client_1.AdminRole.SUPER_ADMIN]), services_controller_1.deleteService);
+router.post("/:serviceId/segments", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(services_schema_1.serviceSegmentSchema), services_controller_1.createSegment);
+router.patch("/:serviceId/segments/:segmentId", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(services_schema_1.updateServiceSegmentSchema), services_controller_1.updateSegment);
+router.delete("/:serviceId/segments/:segmentId", (0, require_admin_1.requireAdmin)(manageRoles), services_controller_1.deleteSegment);
+router.post("/:serviceId/packages", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(services_schema_1.servicePackageSchema), services_controller_1.createPackage);
+router.patch("/:serviceId/packages/:packageId", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(services_schema_1.updateServicePackageSchema), services_controller_1.updatePackage);
+router.delete("/:serviceId/packages/:packageId", (0, require_admin_1.requireAdmin)(manageRoles), services_controller_1.deletePackage);
+router.post("/:serviceId/addons", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(services_schema_1.serviceAddonSchema), services_controller_1.createAddon);
+router.patch("/:serviceId/addons/:addonId", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(services_schema_1.updateServiceAddonSchema), services_controller_1.updateAddon);
+router.delete("/:serviceId/addons/:addonId", (0, require_admin_1.requireAdmin)(manageRoles), services_controller_1.deleteAddon);
+exports.default = router;

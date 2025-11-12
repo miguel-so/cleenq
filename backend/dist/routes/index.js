@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_router_1 = __importDefault(require("../modules/auth/auth.router"));
+const bookings_router_1 = __importDefault(require("../modules/bookings/bookings.router"));
+const cleaners_router_1 = __importDefault(require("../modules/cleaners/cleaners.router"));
+const customers_router_1 = __importDefault(require("../modules/customers/customers.router"));
+const memberships_router_1 = __importDefault(require("../modules/memberships/memberships.router"));
+const rewards_router_1 = __importDefault(require("../modules/rewards/rewards.router"));
+const services_router_1 = __importDefault(require("../modules/services/services.router"));
+const analytics_router_1 = __importDefault(require("../modules/analytics/analytics.router"));
+const router = (0, express_1.Router)();
+router.use("/auth", auth_router_1.default);
+router.use("/services", services_router_1.default);
+router.use("/memberships", memberships_router_1.default);
+router.use("/rewards", rewards_router_1.default);
+router.use("/bookings", bookings_router_1.default);
+router.use("/cleaners", cleaners_router_1.default);
+router.use("/customers", customers_router_1.default);
+router.use("/analytics", analytics_router_1.default);
+exports.default = router;

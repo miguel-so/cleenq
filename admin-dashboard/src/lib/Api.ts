@@ -5,6 +5,7 @@ export enum ApiCommand {
   POST = "post",
   DELETE = "delete",
   PUT = "put",
+  PATCH = "patch",
 }
 
 class Api {
@@ -31,7 +32,7 @@ class Api {
 
   static buildRequestString(
     url: string,
-    queryParams: Record<string, any> = {}
+    queryParams: Record<string, any> = {},
   ): string {
     let queryString = Object.entries(queryParams)
       .map(Api.buildQueryParam)
@@ -58,7 +59,7 @@ class Api {
 
   static async post<T>(
     url: string,
-    options: Record<string, any> = {}
+    options: Record<string, any> = {},
   ): Promise<any> {
     const queryString = Api.buildRequestString(url);
 
@@ -74,7 +75,7 @@ class Api {
 
   static async put<T>(
     url: string,
-    options: Record<string, any> = {}
+    options: Record<string, any> = {},
   ): Promise<any> {
     const queryString = Api.buildRequestString(url);
 
@@ -90,7 +91,7 @@ class Api {
 
   static async delete<T>(
     url: string,
-    queryParams: Record<string, any> = {}
+    queryParams: Record<string, any> = {},
   ): Promise<any> {
     const queryString = Api.buildRequestString(url, queryParams);
 
@@ -100,6 +101,22 @@ class Api {
     } catch (err: any) {
       return {
         error: err?.response?.data?.message || "delete error",
+      };
+    }
+  }
+
+  static async patch<T>(
+    url: string,
+    options: Record<string, any> = {},
+  ): Promise<any> {
+    const queryString = Api.buildRequestString(url);
+
+    try {
+      const response = await Api.client.patch<T>(queryString, options);
+      return { data: response.data, statusCode: response.status };
+    } catch (err: any) {
+      return {
+        error: err?.response?.data?.message || "patch error",
       };
     }
   }

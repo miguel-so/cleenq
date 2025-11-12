@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const client_1 = require("../../generated/prisma/client");
+const validate_request_1 = __importDefault(require("../../middlewares/validate-request"));
+const require_admin_1 = require("../../middlewares/require-admin");
+const bookings_controller_1 = require("./bookings.controller");
+const bookings_schema_1 = require("./bookings.schema");
+const router = (0, express_1.Router)();
+const manageRoles = [client_1.AdminRole.SUPER_ADMIN, client_1.AdminRole.OPERATIONS];
+router.get("/", (0, require_admin_1.requireAdmin)(), (0, validate_request_1.default)(bookings_schema_1.bookingQuerySchema, "query"), bookings_controller_1.listBookingsHandler);
+router.post("/", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(bookings_schema_1.createBookingSchema), bookings_controller_1.createBookingHandler);
+router.get("/:bookingId", (0, require_admin_1.requireAdmin)(), bookings_controller_1.getBookingHandler);
+router.patch("/:bookingId", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(bookings_schema_1.updateBookingSchema), bookings_controller_1.updateBookingHandler);
+router.patch("/:bookingId/status", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(bookings_schema_1.updateBookingStatusSchema), bookings_controller_1.updateBookingStatusHandler);
+router.get("/:bookingId/summary", (0, require_admin_1.requireAdmin)(), bookings_controller_1.getBookingSummaryHandler);
+router.post("/:bookingId/assignments", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(bookings_schema_1.assignCleanerSchema), bookings_controller_1.assignCleanerHandler);
+router.patch("/:bookingId/assignments/:assignmentId", (0, require_admin_1.requireAdmin)(manageRoles), (0, validate_request_1.default)(bookings_schema_1.updateAssignmentSchema), bookings_controller_1.updateAssignmentHandler);
+exports.default = router;
