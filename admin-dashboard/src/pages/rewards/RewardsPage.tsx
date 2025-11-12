@@ -34,7 +34,7 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import { MdDownload, MdRefresh } from "react-icons/md";
+import { MdAdd, MdDownload, MdRefresh } from "react-icons/md";
 
 import Page from "../../components/common/Page";
 import useToastNotification from "../../lib/hooks/useToastNotification";

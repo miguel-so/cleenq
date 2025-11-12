@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AdminRole, AdminStatus } from "../../generated/prisma";
+import { AdminRole, AdminStatus } from "../../generated/prisma/client";
 
 export const loginSchema = z.object({
   email: z

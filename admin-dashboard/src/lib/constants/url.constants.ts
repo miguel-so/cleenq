@@ -1,6 +1,10 @@
 const urlConstants = {
   auth: {
     login: "/api/auth/login",
+    register: "/api/auth/register",
+    forgotPassword: "/api/auth/forgot-password",
+    resetPassword: "/api/auth/reset-password",
+    verifyEmail: (token: string) => `/api/auth/verify-email/${token}`,
     me: "/api/auth/me",
   },
   services: {
@@ -61,6 +65,17 @@ const urlConstants = {
     update: (customerId: string) => `/api/customers/${customerId}`,
     remove: (customerId: string) => `/api/customers/${customerId}`,
     detail: (customerId: string) => `/api/customers/${customerId}`,
+  },
+  users: {
+    getUsers: "/api/users",
+    updateUserStatus: (userId: string) => `/api/users/${userId}/status`,
+    deleteUser: (userId: string) => `/api/users/${userId}`,
+  },
+  categories: {
+    createCategory: "/api/categories",
+    getCategories: "/api/categories",
+    editCategory: (categoryId: string) => `/api/categories/${categoryId}`,
+    deleteCategory: (categoryId: string) => `/api/categories/${categoryId}`,
   },
   analytics: {
     overview: "/api/analytics/overview",

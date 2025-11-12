@@ -1,5 +1,12 @@
 export enum Path {
+  HOME = "/",
+  ABOUT = "/about",
+  ARTS = "/arts",
   LOGIN = "/login",
+  REGISTER = "/register",
+  FORGOT_PASSWORD = "/forgot-password",
+  RESET_PASSWORD = "/reset-password",
+  VERIFY_EMAIL = "/verify-email",
   DASHBOARD = "/",
   PRICING = "/pricing",
   MEMBERSHIPS = "/memberships",

@@ -196,6 +196,7 @@ export interface Booking {
   discount: string | number;
   tax: string | number;
   total: string | number;
+  notes?: string | null;
   customer?: {
     id: string;
     firstName: string;
